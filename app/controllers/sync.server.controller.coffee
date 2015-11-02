@@ -1,6 +1,8 @@
 Evernote = require('evernote').Evernote
 developerToken = process.env.DeveloperToken
 htmlToText = require('html-to-text')
+cheerio = require('cheerio')
+marked = require('marked')
 
 client = new Evernote.Client({
   token:developerToken
@@ -24,12 +26,29 @@ exports.getNoteContent = (req, res, next) ->
 
     console.log content
     console.log ""
-    text = htmlToText.fromString content
+    $ = cheerio.load(content)
+    text = ''
+    $("div").each (i, item) ->
+      text += $(item).text() + "\n"
+
+    console.log "txt ==>"
     console.log text
-    return res.send "ok get"
+    console.log "txt ==>"
+
+    marked.setOptions
+      highlight:(code) ->
+        return require('highlight').highlightAuto(code).value
+
+
+    console.log(marked(text))
+
+    res.send "ko"
+
+
 
 
 exports.getNote = (req, res, next) ->
-  noteStore.getNote
+#  noteStore.getNote
+
 
 
