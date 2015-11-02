@@ -24,5 +24,6 @@ module.exports = ->
   app.set 'view engine', 'jade'
 
   require('../app/routes/index.route') app
+  require('../app/routes/sync.route') app
   app.use express.static('./public')
   app
